@@ -2,43 +2,26 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <title>Modo Merge - (PRUEBA DE DEPURACIÓN)</title>
+  <title>Modo Merge - Cerebro + Solar</title>
   <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/ar.js@3.3.2/aframe/build/aframe-ar.min.js"></script>
   
   <style>
     body { margin: 0; overflow: hidden; }
-    
     #btn-volver {
-      position: absolute;
-      top: 10px; left: 10px;
-      background: rgba(255,255,255,0.2);
-      border: 1px solid white;
-      color: white;
-      padding: 10px 15px;
-      border-radius: 10px;
-      cursor: pointer;
-      z-index: 100;
-      font-family: sans-serif;
+      position: absolute; top: 10px; left: 10px;
+      background: rgba(255,255,255,0.2); border: 1px solid white;
+      color: white; padding: 10px 15px; border-radius: 10px;
+      cursor: pointer; z-index: 100; font-family: sans-serif;
     }
-
     #menu-modelos {
-      position: absolute;
-      bottom: 10px;
-      left: 10px;
-      z-index: 100;
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
+      position: absolute; bottom: 10px; left: 10px;
+      z-index: 100; display: flex; flex-direction: column; gap: 5px;
     }
     #menu-modelos button {
-      background: rgba(0,0,0,0.5);
-      border: 1px solid white;
-      color: white;
-      padding: 8px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 14px;
+      background: rgba(0,0,0,0.5); border: 1px solid white;
+      color: white; padding: 8px 12px; border-radius: 8px;
+      cursor: pointer; font-size: 14px;
     }
   </style>
 </head>
@@ -48,23 +31,33 @@
 
   <div id="menu-modelos">
     <button onclick="showModel('cerebro')">Cerebro</button>
-    </div>
+    <button onclick="showModel('solar')">Sistema Solar</button>
+  </div>
 
   <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: true;">
     
+    <!-- Luces -->
     <a-entity light="type: ambient; color: #FFF; intensity: 0.7"></a-entity>
     <a-entity light="type: directional; color: #FFF; intensity: 0.8" position="-1 1 2"></a-entity>
 
+    <!-- Assets -->
+    <a-assets>
+      <a-asset-item id="brain-model" src="models/BrainStem.glb"></a-asset-item>
+      <a-asset-item id="solar-model" src="models/solar_system_custom.glb"></a-asset-item>
+    </a-assets>
+
+    <!-- Marcador -->
     <a-marker type="pattern" url="patterns/cerebro.patt">
-
-      <a-gltf-model id="model-cerebro" class="modelo-ar" 
-                    src="models/BrainStem.glb"
+      <a-gltf-model id="model-cerebro" class="modelo-ar" src="#brain-model"
                     scale="0.5 0.5 0.5" position="0 0 0" rotation="0 0 0"
-                    visible="true">
-      </a-gltf-model>
+                    visible="true"></a-gltf-model>
 
-      </a-marker>
+      <a-gltf-model id="model-solar" class="modelo-ar" src="#solar-model"
+                    scale="0.1 0.1 0.1" position="0 0 0" rotation="0 0 0"
+                    visible="false"></a-gltf-model>
+    </a-marker>
 
+    <!-- Cámara -->
     <a-entity camera></a-entity>
   </a-scene>
 
@@ -74,7 +67,6 @@
       todosLosModelos.forEach(function(modelo) {
         modelo.setAttribute('visible', 'false');
       });
-
       var modeloAMostrar = document.querySelector('#model-' + nombreModelo);
       if (modeloAMostrar) {
         modeloAMostrar.setAttribute('visible', 'true');
