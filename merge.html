@@ -9,7 +9,7 @@
   <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
   
   <script src="https://raw.githack.com/fcor/aframe-ar-gesture-controls/master/dist/aframe-ar-gesture-controls.min.js"></script>
-  
+
   <script>
     AFRAME.registerComponent('rotacion-magica', {
       init: function () {
@@ -36,7 +36,7 @@
       }
     });
   </script>
-  </head>
+</head>
 
 <body style="margin : 0px; overflow: hidden;">
 
@@ -50,35 +50,49 @@
           debugUIEnabled: true; 
           detectionMode: mono_and_matrix; 
           matrixCodeType: 3x3;"
-    gesture-detector> <a-marker type="pattern" url="patterns/pattern-marker.patt" rotacion-magica>
+    gesture-detector> 
+
+    <a-entity camera 
+      raycaster="objects: .collidable" 
+      cursor="fuse: false; rayOrigin: mouse;">
+    </a-entity>
+
+    <a-marker type="pattern" url="patterns/pattern-marker.patt" rotacion-magica>
 
       <a-entity
-        id="cerebro"
-        gltf-model="url(models/Model_of_a_human_brain.glb)"
-        scale="0.5 0.5 0.5"  rotation="-90 0 0"
+        id="modelo-contenedor"
         position="0 0 0"
-        visible="false"
-        gesture-handler="minScale: 0.25; maxScale: 10"> </a-entity>
+        gesture-handler="minScale: 0.25; maxScale: 10"
+        class="collidable">
 
-      <a-entity
-        id="esqueleto"
-        gltf-model="url(models/skeleton_esqueleto_-_downloadable.glb)"
-        scale="0.5 0.5 0.5"  rotation="-90 0 0"
-        position="0 0 0"
-        visible="false"
-        gesture-handler="minScale: 0.25; maxScale: 10"> </a-entity>
+        <a-entity
+          id="cerebro"
+          gltf-model="url(models/Model_of_a_human_brain.glb)"
+          scale="2 2 2"
+          rotation="-90 0 0"
+          position="0 0 0"
+          visible="false">
+        </a-entity>
 
-      <a-entity
-        id="solar"
-        gltf-model="url(models/solar_system_custom.glb)"
-        scale="0.5 0.5 0.5"  rotation="-90 0 0"
-        position="0 0 0"
-        visible="false"
-        gesture-handler="minScale: 0.25; maxScale: 10"> </a-entity>
+        <a-entity
+          id="esqueleto"
+          gltf-model="url(models/skeleton_esqueleto_-_downloadable.glb)"
+          scale="2 2 2"
+          rotation="-90 0 0"
+          position="0 0 0"
+          visible="false">
+        </a-entity>
 
-    </a-marker>
-
-    <a-entity camera></a-entity>
+        <a-entity
+          id="solar"
+          gltf-model="url(models/solar_system_custom.glb)"
+          scale="2 2 2"
+          rotation="-90 0 0"
+          position="0 0 0"
+          visible="false">
+        </a-entity>
+        
+      </a-entity> </a-marker>
   </a-scene>
 </body>
 </html>
