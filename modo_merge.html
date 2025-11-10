@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <title>Modo Merge - Cubo AR</title>
+  <title>Modo Merge - (PRUEBA DE DEPURACIÓN)</title>
   <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/ar.js@3.3.2/aframe/build/aframe-ar.min.js"></script>
   
@@ -21,9 +21,7 @@
       z-index: 100;
       font-family: sans-serif;
     }
-    #btn-volver:hover { background: white; color: black; }
 
-    /* --- Menú para cambiar modelos --- */
     #menu-modelos {
       position: absolute;
       bottom: 10px;
@@ -42,11 +40,6 @@
       cursor: pointer;
       font-size: 14px;
     }
-    #menu-modelos button:hover {
-      background: white;
-      color: black;
-    }
-
   </style>
 </head>
 
@@ -55,12 +48,7 @@
 
   <div id="menu-modelos">
     <button onclick="showModel('cerebro')">Cerebro</button>
-    <button onclick="showModel('solar')">Sistema Solar</button>
-    <button onclick="showModel('esqueleto')">Esqueleto</button>
-    <button onclick="showModel('planta')">Planta</button>
-    <button onclick="showModel('motor')">Motor</button>
-    <button onclick="showModel('volcan')">Volcán</button>
-  </div>
+    </div>
 
   <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: true;">
     
@@ -75,51 +63,18 @@
                     visible="true">
       </a-gltf-model>
 
-      <a-gltf-model id="model-solar" class="modelo-ar" 
-                    src="models/solar_system_custom.glb"
-                    scale="0.1 0.1 0.1" position="0 0 0" rotation="0 0 0"
-                    visible="false">
-      </a-gltf-model>
-
-      <a-gltf-model id="model-esqueleto" class="modelo-ar" 
-                    src="models/skeleton_esqueleto_-_downloadable.glb"
-                    scale="0.4 0.4 0.4" position="0 0 0" rotation="0 0 0"
-                    visible="false">
-      </a-gltf-model>
-      
-      <a-gltf-model id="model-planta" class="modelo-ar" 
-                    src="models/iKEA_MONSTERA DELICIOSA Planta.glb"
-                    scale="15 15 15" position="0 0 0" rotation="0 0 0"
-                    visible="false">
-      </a-gltf-model>
-      
-      <a-gltf-model id="model-motor" class="modelo-ar" 
-                    src="models/oscillating_cylinder_motor_for_lego_3d_print.glb"
-                    scale="0.5 0.5 0.5" position="0 0 0" rotation="0 0 0"
-                    visible="false">
-      </a-gltf-model>
-      
-      <a-gltf-model id="model-volcan" class="modelo-ar" 
-                    src="models/volcan_paricutin.glb"
-                    scale="0.3 0.3 0.3" position="0 0 0" rotation="0 0 0"
-                    visible="false">
-      </a-gltf-model>
-
-    </a-marker>
+      </a-marker>
 
     <a-entity camera></a-entity>
   </a-scene>
 
   <script>
     function showModel(nombreModelo) {
-      
-      // 1. Ocultar todos los modelos
       var todosLosModelos = document.querySelectorAll('.modelo-ar');
       todosLosModelos.forEach(function(modelo) {
         modelo.setAttribute('visible', 'false');
       });
 
-      // 2. Mostrar solo el modelo seleccionado
       var modeloAMostrar = document.querySelector('#model-' + nombreModelo);
       if (modeloAMostrar) {
         modeloAMostrar.setAttribute('visible', 'true');
