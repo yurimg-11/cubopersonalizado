@@ -1,62 +1,34 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <title>AR.js - Efecto Cubo</title>
+  <meta charset="utf-itf-8">
+  <title>AR.js - Rotación + Gestos</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   
   <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
   <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-
-  <style>
-    body { margin: 0; }
-    #back-button {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      padding: 10px 15px;
-      font-size: 16px;
-      background: white;
-      color: black;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      z-index: 10000;
-    }
-  </style>
-
+  
+  <script src="https://raw.githack.com/fcor/aframe-ar-gesture-controls/master/dist/aframe-ar-gesture-controls.min.js"></script>
+  
   <script>
-    // 1. Registramos un nuevo "componente" de A-Frame llamado 'rotacion-magica'
     AFRAME.registerComponent('rotacion-magica', {
-      
-      // 'init' se ejecuta una vez, cuando el marcador se carga
       init: function () {
-        // Buscamos los 3 modelos por su 'id' y los guardamos para usarlos después
         this.cerebro = document.querySelector('#cerebro');
         this.esqueleto = document.querySelector('#esqueleto');
         this.solar = document.querySelector('#solar');
       },
-
-      // 'tick' se ejecuta en CADA fotograma (muchas veces por segundo)
       tick: function () {
-        // Obtenemos la rotación actual del marcador en grados (eje Y)
         let rotacionGradosY = THREE.MathUtils.radToDeg(this.el.object3D.rotation.y);
 
-        // 2. Lógica para decidir qué modelo mostrar
         if (rotacionGradosY > -60 && rotacionGradosY < 60) {
-          // Vista Frontal (-60 a 60 grados): Muestra CEREBRO
           this.cerebro.setAttribute('visible', true);
           this.esqueleto.setAttribute('visible', false);
           this.solar.setAttribute('visible', false);
-
         } else if (rotacionGradosY >= 60) {
-          // Vista Derecha (60 a 180 grados): Muestra ESQUELETO
           this.cerebro.setAttribute('visible', false);
           this.esqueleto.setAttribute('visible', true);
           this.solar.setAttribute('visible', false);
-
         } else if (rotacionGradosY <= -60) {
-          // Vista Izquierda (-60 a -180 grados): Muestra SOLAR
           this.cerebro.setAttribute('visible', false);
           this.esqueleto.setAttribute('visible', false);
           this.solar.setAttribute('visible', true);
@@ -77,36 +49,32 @@
     arjs="sourceType: webcam; 
           debugUIEnabled: true; 
           detectionMode: mono_and_matrix; 
-          matrixCodeType: 3x3;">
-
-    <a-marker type="pattern" url="patterns/pattern-marker.patt" rotacion-magica>
+          matrixCodeType: 3x3;"
+    gesture-detector> <a-marker type="pattern" url="patterns/pattern-marker.patt" rotacion-magica>
 
       <a-entity
         id="cerebro"
-        gltf-model="url(models/BrainStem.glb)"
-        scale="0.1 0.1 0.1"
-        rotation="-90 0 0"
+        gltf-model="url(models/Model_of_a_human_brain.glb)"
+        scale="0.5 0.5 0.5"  rotation="-90 0 0"
         position="0 0 0"
-        visible="false">
-      </a-entity>
+        visible="false"
+        gesture-handler="minScale: 0.25; maxScale: 10"> </a-entity>
 
       <a-entity
         id="esqueleto"
         gltf-model="url(models/skeleton_esqueleto_-_downloadable.glb)"
-        scale="0.1 0.1 0.1"
-        rotation="-90 0 0"
+        scale="0.5 0.5 0.5"  rotation="-90 0 0"
         position="0 0 0"
-        visible="false">
-      </a-entity>
+        visible="false"
+        gesture-handler="minScale: 0.25; maxScale: 10"> </a-entity>
 
       <a-entity
         id="solar"
         gltf-model="url(models/solar_system_custom.glb)"
-        scale="0.1 0.1 0.1"
-        rotation="-90 0 0"
+        scale="0.5 0.5 0.5"  rotation="-90 0 0"
         position="0 0 0"
-        visible="false">
-      </a-entity>
+        visible="false"
+        gesture-handler="minScale: 0.25; maxScale: 10"> </a-entity>
 
     </a-marker>
 
