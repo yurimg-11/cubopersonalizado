@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Modo Merge - Cubo AR</title>
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ar.js@3.3.2/aframe/build/aframe-ar.min.js"></script>
+  <style>
+    body { margin: 0; overflow: hidden; }
+    #btn-volver {
+      position: absolute;
+      top: 10px; left: 10px;
+      background: rgba(255,255,255,0.2);
+      border: 1px solid white;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 10px;
+      cursor: pointer;
+      z-index: 10;
+      font-family: sans-serif;
+    }
+    #btn-volver:hover { background: white; color: black; }
+  </style>
+</head>
+
+<body>
+  <button id="btn-volver" onclick="window.location.href='index.html'">🔙 Volver</button>
+
+  <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: true;">
+    
+    <a-entity light="type: ambient; color: #FFF; intensity: 0.7"></a-entity>
+    <a-entity light="type: directional; color: #FFF; intensity: 0.8" position="-1 1 2"></a-entity>
+
+    <a-marker type="pattern" url="patterns/cerebro.patt">
+      <a-gltf-model src="models/BrainStem.glb"
+                    scale="0.5 0.5 0.5"
+                    position="0 0.2 0"
+                    rotation="0 0 0">
+      </a-gltf-model>
+    </a-marker>
+
+    <a-marker type="pattern" url="patterns/esqueleto.patt">
+      <a-gltf-model src="models/CesiumMan.glb"
+                    scale="0.4 0.4 0.4"
+                    position="0 0.5 0"
+                    rotation="0 0 0">
+      </a-gltf-model>
+    </a-marker>
+
+    <a-marker type="pattern" url="patterns/motor.patt">
+      <a-gltf-model src="models/DamagedHelmet.glb"
+                    scale="0.5 0.5 0.5"
+                    position="0 0.5 0"
+                    rotation="0 0 0">
+      </a-gltf-model>
+    </a-marker>
+
+    <a-marker type="pattern" url="patterns/planta.patt">
+      <a-gltf-model src="models/Avocado.glb"
+                    scale="15 15 15"
+                    position="0 0.3 0"
+                    rotation="0 0 0">
+      </a-gltf-model>
+    </a-marker>
+    
+    <a-marker type="pattern" url="patterns/solar.patt">
+      <a-gltf-model src="models/solar_system_custom.glb"
+                    scale="0.1 0.1 0.1"
+                    position="0 0.5 0"
+                    rotation="0 0 0">
+      </a-gltf-model>
+    </a-marker>
+    
+    <a-marker type="pattern" url="patterns/volcan.patt">
+      <a-gltf-model src="models/CesiumMilkTruck.glb"
+                    scale="0.3 0.3 0.3"
+                    position="0 0.3 0"
+                    rotation="0 0 0">
+      </a-gltf-model>
+    </a-marker>
+
+    <a-entity camera></a-entity>
+  </a-scene>
+</body>
+</html>
