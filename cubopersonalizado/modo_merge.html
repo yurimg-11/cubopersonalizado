@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Modo Merge - Cubo AR</title>
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ar.js@3.3.2/aframe/build/aframe-ar.min.js"></script>
+  
+  <style>
+    body { margin: 0; overflow: hidden; }
+    
+    #btn-volver {
+      position: absolute;
+      top: 10px; left: 10px;
+      background: rgba(255,255,255,0.2);
+      border: 1px solid white;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 10px;
+      cursor: pointer;
+      z-index: 100;
+      font-family: sans-serif;
+    }
+    #btn-volver:hover { background: white; color: black; }
+
+    /* --- Menú para cambiar modelos --- */
+    #menu-modelos {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    #menu-modelos button {
+      background: rgba(0,0,0,0.5);
+      border: 1px solid white;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    #menu-modelos button:hover {
+      background: white;
+      color: black;
+    }
+
+  </style>
+</head>
+
+<body>
+  <button id="btn-volver" onclick="window.location.href='index.html'">🔙 Volver</button>
+
+  <div id="menu-modelos">
+    <button onclick="showModel('cerebro')">Cerebro</button>
+    <button onclick="showModel('solar')">Sistema Solar</button>
+    <button onclick="showModel('esqueleto')">Esqueleto</button>
+    <button onclick="showModel('planta')">Planta</button>
+    <button onclick="showModel('motor')">Motor</button>
+    <button onclick="showModel('volcan')">Volcán</button>
+  </div>
+
+  <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: true;">
+    
+    <a-entity light="type: ambient; color: #FFF; intensity: 0.7"></a-entity>
+    <a-entity light="type: directional; color: #FFF; intensity: 0.8" position="-1 1 2"></a-entity>
+
+    <a-marker type="pattern" url="patterns/cerebro.patt">
+
+      <a-gltf-model id="model-cerebro" class="modelo-ar" 
+                    src="models/BrainStem.glb"
+                    scale="0.5 0.5 0.5" position="0 0 0" rotation="0 0 0"
+                    visible="true">
+      </a-gltf-model>
+
+      <a-gltf-model id="model-solar" class="modelo-ar" 
+                    src="models/solar_system_custom.glb"
+                    scale="0.1 0.1 0.1" position="0 0 0" rotation="0 0 0"
+                    visible="false">
+      </a-gltf-model>
+
+      <a-gltf-model id="model-esqueleto" class="modelo-ar" 
+                    src="models/CesiumMan.glb"
+                    scale="0.4 0.4 0.4" position="0 0 0" rotation="0 0 0"
+                    visible="false">
+      </a-gltf-model>
+      
+      <a-gltf-model id="model-planta" class="modelo-ar" 
+                    src="models/Avocado.glb"
+                    scale="15 15 15" position="0 0 0" rotation="0 0 0"
+                    visible="false">
+      </a-gltf-model>
+      
+      <a-gltf-model id="model-motor" class="modelo-ar" 
+                    src="models/DamagedHelmet.glb"
+                    scale="0.5 0.5 0.5" position="0 0 0" rotation="0 0 0"
+                    visible="false">
+      </a-gltf-model>
+      
+      <a-gltf-model id="model-volcan" class="modelo-ar" 
+                    src="models/CesiumMilkTruck.glb"
+                    scale="0.3 0.3 0.3" position="0 0 0" rotation="0 0 0"
+                    visible="false">
+      </a-gltf-model>
+
+    </a-marker>
+
+    <a-entity camera></a-entity>
+  </a-scene>
+
+  <script>
+    function showModel(nombreModelo) {
+      
+      // 1. Ocultar todos los modelos
+      var todosLosModelos = document.querySelectorAll('.modelo-ar');
+      todosLosModelos.forEach(function(modelo) {
+        modelo.setAttribute('visible', 'false');
+      });
+
+      // 2. Mostrar solo el modelo seleccionado
+      var modeloAMostrar = document.querySelector('#model-' + nombreModelo);
+      if (modeloAMostrar) {
+        modeloAMostrar.setAttribute('visible', 'true');
+      }
+    }
+  </script>
+
+</body>
+</html>
