@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-itf-8">
-  <title>AR.js - 3 Marcadores + Gestos</title>
+  <meta charset="utf-8">
+  <title>AR.js - 6 Marcadores + Gestos</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   
   <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
@@ -21,13 +21,14 @@
     embedded
     arjs="sourceType: webcam; 
           debugUIEnabled: false; detectionMode: mono_and_matrix; 
-          matrixCodeType: 3x3;"
-    gesture-detector> 
-
-    <a-entity camera 
-      raycaster="objects: .collidable" 
-      cursor="fuse: false; rayOrigin: mouse;">
+          matrixCodeType: 3x3;">
+    <a-entity gesture-detector>
+      <a-entity camera 
+        raycaster="objects: .collidable" 
+        cursor="fuse: false; rayOrigin: mouse;">
+      </a-entity>
     </a-entity>
+
 
     <a-marker type="pattern" url="patterns/cerebro.patt">
       <a-entity
@@ -35,7 +36,8 @@
         gltf-model="url(models/Model_of_a_human_brain.glb)"
         scale="1 1 1"
         rotation="-90 0 0"
-        position="0 0 0" gesture-handler="minScale: 0.25; maxScale: 10"
+        position="0 0 0" 
+        gesture-handler="minScale: 0.25; maxScale: 10"
         class="collidable">
       </a-entity>
     </a-marker>
@@ -100,7 +102,7 @@
       </a-entity>
     </a-marker>
 
-
   </a-scene>
+
 </body>
 </html>
