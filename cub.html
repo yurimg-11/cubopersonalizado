@@ -63,15 +63,7 @@
     </a-entity>
 
     <!-- Marcador 1: Cerebro -->
-    <a-marker type="pattern" url="patterns/pattern-marker.patt">
-      <a-entity
-        id="cerebro"
-        gltf-model="url(modelos/Model_of_a_human_brain.glb)"
-        scale="1 1 1"
-        rotation="-90 0 0"
-        position="0 0 0" 
-        
-        <!-- 
+     <!-- 
           ¡AQUÍ ESTÁ LA MAGIA!
           'gesture-handler' activa:
           1. Rotación (arrastrando con 1 dedo)
@@ -80,10 +72,19 @@
           Tú ya estás configurando los límites del zoom (minScale y maxScale).
           La rotación se activa por defecto.
         -->
+      <!-- 'class="collidable"' es esencial para que el 'raycaster' sepa que este objeto se puede tocar -->
+
+    <a-marker type="pattern" url="patterns/pattern-marker.patt">
+      <a-entity
+        id="cerebro"
+        gltf-model="url(modelos/Model_of_a_human_brain.glb)"
+        scale="1 1 1"
+        rotation="-90 0 0"
+        position="0 0 0" 
         gesture-handler="minScale: 0.25; maxScale: 10"
-        
-        <!-- 'class="collidable"' es esencial para que el 'raycaster' sepa que este objeto se puede tocar -->
+
         class="collidable">
+
       </a-entity>
     </a-marker>
 
@@ -96,7 +97,7 @@
         rotation="-90 0 0"
         position="0 0 0"
         
-        <!-- Igual que arriba: esto activa rotar (1 dedo) y zoom (2 dedos) -->
+        
         gesture-handler="minScale: 0.25; maxScale: 10"
         class="collidable">
       </a-entity>
