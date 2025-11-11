@@ -1,16 +1,41 @@
-<!-- cub.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <title>AR.js - Cubo de 6 Caras (¡Corregido!)</title>
+  <title>AR.js - Visor de Modelos con Gestos</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   
+  <!-- A-Frame -->
   <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+  
+  <!-- AR.js -->
   <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
   
+  <!-- 
+    Esta es la biblioteca que te da los gestos (rotar y escalar).
+    Se compone de dos partes:
+    1. 'gesture-detector' (que pones en la cámara)
+    2. 'gesture-handler' (que pones en los objetos que quieres mover)
+  -->
   <script src="https://cdn.jsdelivr.net/gh/fcor/aframe-ar-gesture-controls@master/dist/aframe-ar-gesture-controls.min.js"></script>
   
+  <style>
+    /* He añadido un poco de estilo al botón "Volver" para que se vea mejor */
+    #back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 10; /* Se asegura de que esté por encima de la vista de la cámara */
+      padding: 10px 15px;
+      font-size: 16px;
+      background-color: white;
+      color: black;
+      border: 1px solid #555;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: Arial, sans-serif;
+    }
+  </style>
 </head>
 
 <body style="margin : 0px; overflow: hidden;">
@@ -26,6 +51,10 @@
           detectionMode: mono_and_matrix; 
           matrixCodeType: 3x3;"> 
 
+    <!-- 
+      El gesture-detector "detecta" los gestos en la pantalla
+      y los re-envía al 'gesture-handler' que esté sobre el objeto tocado.
+    -->
     <a-entity gesture-detector>
       <a-entity camera 
         raycaster="objects: .collidable" 
@@ -33,6 +62,7 @@
       </a-entity>
     </a-entity>
 
+    <!-- Marcador 1: Cerebro -->
     <a-marker type="pattern" url="patterns/pattern-marker.patt">
       <a-entity
         id="cerebro"
@@ -40,11 +70,24 @@
         scale="1 1 1"
         rotation="-90 0 0"
         position="0 0 0" 
+        
+        <!-- 
+          ¡AQUÍ ESTÁ LA MAGIA!
+          'gesture-handler' activa:
+          1. Rotación (arrastrando con 1 dedo)
+          2. Escalado/Zoom (pellizcando con 2 dedos)
+          
+          Tú ya estás configurando los límites del zoom (minScale y maxScale).
+          La rotación se activa por defecto.
+        -->
         gesture-handler="minScale: 0.25; maxScale: 10"
+        
+        <!-- 'class="collidable"' es esencial para que el 'raycaster' sepa que este objeto se puede tocar -->
         class="collidable">
       </a-entity>
     </a-marker>
 
+    <!-- Marcador 2: Esqueleto -->
     <a-marker type="pattern" url="patterns/esqueleto.patt">
       <a-entity
         id="esqueleto"
@@ -52,11 +95,14 @@
         scale="1 1 1"
         rotation="-90 0 0"
         position="0 0 0"
+        
+        <!-- Igual que arriba: esto activa rotar (1 dedo) y zoom (2 dedos) -->
         gesture-handler="minScale: 0.25; maxScale: 10"
         class="collidable">
       </a-entity>
     </a-marker>
     
+    <!-- Marcador 3: Sistema Solar -->
     <a-marker type="pattern" url="patterns/solar.patt">
       <a-entity
         id="solar"
@@ -69,6 +115,7 @@
       </a-entity>
     </a-marker>
 
+    <!-- Marcador 4: Corazón -->
     <a-marker type="pattern" url="patterns/corazon.patt">
       <a-entity
         id="corazon"
@@ -81,6 +128,7 @@
       </a-entity>
     </a-marker>
 
+    <!-- Marcador 5: Mano -->
     <a-marker type="pattern" url="patterns/hand.patt">
       <a-entity
         id="mano"
@@ -93,6 +141,7 @@
       </a-entity>
     </a-marker>
 
+    <!-- Marcador 6: Volcán -->
     <a-marker type="pattern" url="patterns/volcan.patt">
       <a-entity
         id="volcan"
