@@ -83,16 +83,12 @@
           detectionMode: mono_and_matrix; 
           matrixCodeType: 3x3;
           
-          patternRatio: 0.75;">
+          patternRatio: 0.75;"
+    
+    gesture-detector>
 
     <a-assets>
-      <a-asset-item id="cerebro" src="modelos/encefalo_humano.glb"></a-asset-item>
-      <a-asset-item id="esqueleto" src="modelos/skeleton_esqueleto_-_downloadable.glb"></a-asset-item>
-      <a-asset-item id="s-solar" src="modelos/solar_system_custom.glb"></a-asset-item>
-      <a-asset-item id="corazon" src="modelos/corazon__anim.glb"></a-asset-item>
-      <a-asset-item id="mano" src="modelos/hand_monster.glb"></a-asset-item>
-      <a-asset-item id="volcan" src="modelos/volcan_turrialba_santa_cruz_costa_rica.glb"></a-asset-item>
-    </a-assets>
+      </a-assets>
 
     <a-entity camera 
         raycaster="objects: .collidable; interval: 100" 
@@ -100,21 +96,28 @@
     
     </a-entity>
 
-    <a-marker type="pattern" url="patterns/pattern-arjs.patt">
-      
-      <a-entity
-        id="modelo-activo"
+    <a-marker type='barcode' value='0'>
+      <a-entity id="modelo-activo-0" gltf-model="#cerebro" 
+        scale="5 5 5" position="0 0.5 0" rotation="-90 0 0" 
         
-        gltf-model="#cerebro"
-        
-        scale="5 5 5"
-        position="0 0.5 0"
-        rotation="-90 0 0" 
-        
-        
+        gesture-handler="minScale: 0.5; maxScale: 10;" 
         class="collidable">
       </a-entity>
-      
+    </a-marker>
+    <a-marker type='barcode' value='1'>
+      <a-entity id="modelo-activo-1" gltf-model="#cerebro" scale="5 5 5" position="0 0.5 0" rotation="-90 0 0" gesture-handler="minScale: 0.5; maxScale: 10;" class="collidable"></a-entity>
+    </a-marker>
+    <a-marker type='barcode' value='2'>
+      <a-entity id="modelo-activo-2" gltf-model="#cerebro" scale="5 5 5" position="0 0.5 0" rotation="-90 0 0" gesture-handler="minScale: 0.5; maxScale: 10;" class="collidable"></a-entity>
+    </a-marker>
+    <a-marker type='barcode' value='3'>
+      <a-entity id="modelo-activo-3" gltf-model="#cerebro" scale="5 5 5" position="0 0.5 0" rotation="-90 0 0" gesture-handler="minScale: 0.5; maxScale: 10;" class="collidable"></a-entity>
+    </a-marker>
+    <a-marker type='barcode' value='4'>
+      <a-entity id="modelo-activo-4" gltf-model="#cerebro" scale="5 5 5" position="0 0.5 0" rotation="-90 0 0" gesture-handler="minScale: 0.5; maxScale: 10;" class="collidable"></a-entity>
+    </a-marker>
+    <a-marker type='barcode' value='5'>
+      <a-entity id="modelo-activo-5" gltf-model="#cerebro" scale="5 5 5" position="0 0.5 0" rotation="-90 0 0" gesture-handler="minScale: 0.5; maxScale: 10;" class="collidable"></a-entity>
     </a-marker>
 
   </a-scene>
@@ -122,7 +125,8 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const menu = document.getElementById('menu');
-      const modeloActivo = document.getElementById('modelo-activo');
+      // Seleccionamos todas las entidades modelo activas
+      const modelosActivos = document.querySelectorAll('[id^="modelo-activo-"]'); 
       const buttons = document.querySelectorAll('#menu button');
 
       menu.addEventListener('click', (event) => {
@@ -132,15 +136,18 @@
         event.target.classList.add('active');
 
         const modelId = event.target.getAttribute('data-asset-id');
-        modeloActivo.setAttribute('visible', 'false');
-        
-        // Se usa el ID del asset (e.g., '#cerebro')
-        modeloActivo.setAttribute('gltf-model', `#${modelId}`);
-        
-       
-        modeloActivo.addEventListener('model-loaded', () => {
-          modeloActivo.setAttribute('visible', 'true');
-        }, { once: true });
+        const assetReference = `#${modelId}`;
+
+        // Iteramos sobre todos los modelos (0 a 5) y cambiamos su GLTF-model
+        modelosActivos.forEach(modeloActivo => {
+          modeloActivo.setAttribute('visible', 'false');
+          modeloActivo.setAttribute('gltf-model', assetReference);
+
+          // Hacemos visible cada modelo después de que su asset individual cargue
+          modeloActivo.addEventListener('model-loaded', () => {
+            modeloActivo.setAttribute('visible', 'true');
+          }, { once: true });
+        });
       });
     });
   </script>
