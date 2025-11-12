@@ -64,7 +64,7 @@
   <button id="back-button" onclick="window.location.href='index.html'">Volver</button>
 
   <div id="menu">
-    <button class="active" data-model="modelos/Model_of_a_human_brain.glb">Cerebro</button>
+    <button class="active" data-model="modelos/encefalo_humano.glb">Cerebro</button>
     <button data-model="modelos/skeleton_esqueleto_-_downloadable.glb">Esqueleto</button>
     <button data-model="modelos/solar_system_custom.glb">S. Solar</button>
     <button data-model="modelos/corazon__anim.glb">Corazón</button>
@@ -78,13 +78,11 @@
     renderer="logarithmicDepthBuffer: true;"
     arjs="sourceType: webcam; 
           
-          <!-- CAMBIO 1: Activamos la UI de depuración -->
           debugUIEnabled: true; 
           
           detectionMode: mono_and_matrix; 
           matrixCodeType: 3x3;
           
-          <!-- CAMBIO 2: Ajustamos el 'ratio' del borde -->
           patternRatio: 0.75;">
 
     <a-entity gesture-detector>
@@ -94,11 +92,11 @@
       </a-entity>
     </a-entity>
 
-    <a-marker type="pattern" url="patterns/pattern-marker.patt">
+    <a-marker type="pattern" url="patterns/pattern-arjs.patt">
       
       <a-entity
         id="modelo-activo"
-        gltf-model="url(modelos/Model_of_a_human_brain.glb)"
+        gltf-model="url(modelos/modelos/encefalo_humano.glb)"
         
         scale="5 5 5"
         position="0 0.5 0"
