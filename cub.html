@@ -18,22 +18,64 @@
     2. 'gesture-handler' (que pones en los objetos que quieres mover)
   -->
   <script src="https://cdn.jsdelivr.net/gh/fcor/aframe-ar-gesture-controls@master/dist/aframe-ar-gesture-controls.min.js"></script>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>AR.js - Visor con Menú</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  
+  <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/fcor/aframe-ar-gesture-controls@master/dist/aframe-ar-gesture-controls.min.js"></script>
   
   <style>
-    /* He añadido un poco de estilo al botón "Volver" para que se vea mejor */
+    /* Estilos para el Menú */
+    #menu {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      display: flex;
+      flex-wrap: wrap; /* Para que quepa en móviles */
+      justify-content: center;
+      gap: 10px;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    #menu button {
+      padding: 10px 15px;
+      font-size: 14px;
+      font-weight: bold;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.2s, box-shadow 0.2s;
+    }
+    #menu button:hover {
+      background-color: #0056b3;
+    }
+    
+    /* Estilo para el botón activo */
+    #menu button.active {
+      background-color: #28a745;
+      box-shadow: 0 0 10px #28a745, 0 0 5px rgba(0,0,0,0.5);
+    }
+    
+    /* Botón Volver (lo he movido a la esquina) /* ... existing code ... 
+    
+    
+    -->*/
     #back-button {
       position: absolute;
       top: 20px;
-      left: 20px;
-      z-index: 10; /* Se asegura de que esté por encima de la vista de la cámara */
-      padding: 10px 15px;
-      font-size: 16px;
-      background-color: white;
-      color: black;
-      border: 1px solid #555;
+
       border-radius: 8px;
-      cursor: pointer;
-      font-family: Arial, sans-serif;
     }
   </style>
 </head>
@@ -42,119 +84,91 @@
 
   <button id="back-button" onclick="window.location.href='index.html'">Volver</button>
 
+  <!-- 
+    EL MENÚ
+    - Cada botón tiene un atributo 'data-model' 
+    - Este atributo guarda la RUTA (URL) al modelo 3D que debe cargar.-->
+  <div id="menu">
+    <button class="active" data-model="modelos/Model_of_a_human_brain.glb">Cerebro</button>
+    <button data-model="modelos/skeleton_esqueleto_-_downloadable.glb">Esqueleto</button>
+    <button data-model="modelos/solar_system_custom.glb">S. Solar</button>
+    <button data-model="modelos/corazon__anim.glb">Corazón</button>
+    <button data-model="modelos/hand_monster.glb">Mano</button>
+    <button data-model="modelos/volcan_turrialba_santa_cruz_costa_rica.glb">Volcán</button>
+  </div>
+
   <a-scene
     vr-mode-ui="enabled: false;"
-    renderer="logarithmicDepthBuffer: true; precision: medium;"
     embedded
-    arjs="sourceType: webcam; 
-          debugUIEnabled: false; 
-          detectionMode: mono_and_matrix; 
-          matrixCodeType: 3x3;"> 
+    renderer="logarithmicDepthBuffer: true;"
+    arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;">
 
-    <!-- 
-      El gesture-detector "detecta" los gestos en la pantalla
-      y los re-envía al 'gesture-handler' que esté sobre el objeto tocado.
-    -->
     <a-entity gesture-detector>
       <a-entity camera 
-        raycaster="objects: .collidable" 
+        raycaster="objects: .collidable; interval: 100" 
         cursor="fuse: false; rayOrigin: mouse;">
       </a-entity>
     </a-entity>
 
-    <!-- Marcador 1: Cerebro -->
-     <!-- 
-          ¡AQUÍ ESTÁ LA MAGIA!
-          'gesture-handler' activa:
-          1. Rotación (arrastrando con 1 dedo)
-          2. Escalado/Zoom (pellizcando con 2 dedos)
-          
-          Tú ya estás configurando los límites del zoom (minScale y maxScale).
-          La rotación se activa por defecto.
-        -->
-      <!-- 'class="collidable"' es esencial para que el 'raycaster' sepa que este objeto se puede tocar -->
-
+    <!-- 
+      UN SOLO MARCADOR
+      - CORRECCIÓN: Usamos el archivo 'pattern-marker.patt' original 
+        que ya tenías de tu primer código.
+    -->
     <a-marker type="pattern" url="patterns/pattern-marker.patt">
+      
+      <!-- 
+        UN SOLO CONTENEDOR
+        - Este es el <a-entity> que cambiará su modelo 3D.
+        - Comienza cargando el cerebro por defecto (coincide con el botón activo).
+      -->
+      
       <a-entity
-        id="cerebro"
+        id="modelo-activo"
         gltf-model="url(modelos/Model_of_a_human_brain.glb)"
         scale="1 1 1"
         rotation="-90 0 0"
-        position="0 0 0" 
-        gesture-handler="minScale: 0.25; maxScale: 10"
-
-        class="collidable">
-
-      </a-entity>
-    </a-marker>
-
-    <!-- Marcador 2: Esqueleto -->
-    <a-marker type="pattern" url="patterns/esqueleto.patt">
-      <a-entity
-        id="esqueleto"
-        gltf-model="url(modelos/skeleton_esqueleto_-_downloadable.glb)"
-        scale="1 1 1"
-        rotation="-90 0 0"
-        position="0 0 0"
-        
-        
         gesture-handler="minScale: 0.25; maxScale: 10"
         class="collidable">
       </a-entity>
-    </a-marker>
-    
-    <!-- Marcador 3: Sistema Solar -->
-    <a-marker type="pattern" url="patterns/solar.patt">
-      <a-entity
-        id="solar"
-        gltf-model="url(modelos/solar_system_custom.glb)"
-        scale="1 1 1"
-        rotation="-90 0 0"
-        position="0 0 0"
-        gesture-handler="minScale: 0.25; maxScale: 10"
-        class="collidable">
-      </a-entity>
-    </a-marker>
 
-    <!-- Marcador 4: Corazón -->
-    <a-marker type="pattern" url="patterns/corazon.patt">
-      <a-entity
-        id="corazon"
-        gltf-model="url(modelos/corazon__anim.glb)"
-        scale="1 1 1"
-        rotation="-90 0 0"
-        position="0 0 0"
-        gesture-handler="minScale: 0.25; maxScale: 10"
-        class="collidable">
-      </a-entity>
-    </a-marker>
-
-    <!-- Marcador 5: Mano -->
-    <a-marker type="pattern" url="patterns/hand.patt">
-      <a-entity
-        id="mano"
-        gltf-model="url(modelos/hand_monster.glb)"
-        scale="1 1 1"
-        rotation="-90 0 0"
-        position="0 0 0"
-        gesture-handler="minScale: 0.25; maxScale: 10"
-        class="collidable">
-      </a-entity>
-    </a-marker>
-
-    <!-- Marcador 6: Volcán -->
-    <a-marker type="pattern" url="patterns/volcan.patt">
-      <a-entity
-        id="volcan"
-        gltf-model="url(modelos/volcan_turrialba_santa_cruz_costa_rica.glb)"
-        scale="1 1 1"
-        rotation="-90 0 0"
-        position="0 0 0"
-        gesture-handler="minScale: 0.25; maxScale: 10"
-        class="collidable">
-      </a-entity>
     </a-marker>
 
   </a-scene>
+
+  <script>
+    // Esperamos a que la página cargue
+    document.addEventListener('DOMContentLoaded', () => {
+      
+      // Obtenemos las referencias al menú y al modelo 3D
+      const menu = document.getElementById('menu');
+      const modeloActivo = document.getElementById('modelo-activo');
+      const buttons = document.querySelectorAll('#menu button');
+
+      // Añadimos un 'escuchador' de clics al menú
+      menu.addEventListener('click', (event) => {
+        
+        <!-- Si el clic no fue en un botón, no hacemos nada -->
+        if (event.target.tagName !== 'BUTTON') return;
+
+        //1. Quitar la clase 'active' de todos los botones -->
+        buttons.forEach(btn => btn.classList.remove('active'));
+        
+        //-2. Añadir 'active' solo al botón que fue clickeado -->
+        event.target.classList.add('active');
+        
+        //3. Obtener la URL del modelo desde el atributo 'data-model'-->
+        const modelUrl = event.target.getAttribute('data-model');
+
+        //4. Actualizar el modelo 3D en la escena -->
+        //Usamos setAttribute para cambiar el 'gltf-model'-->
+        modeloActivo.setAttribute('gltf-model', `url(${modelUrl})`);
+        
+        //Nos aseguramos de que sea visible -->
+        modeloActivo.setAttribute('visible', 'true');
+      });
+    });
+  </script>
+
 </body>
 </html>
