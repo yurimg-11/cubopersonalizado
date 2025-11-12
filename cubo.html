@@ -2,27 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <title>AR.js - Visor de Modelos con Gestos</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  
-  <!-- A-Frame -->
-  <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
-  
-  <!-- AR.js -->
-  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-  
-  <!-- 
-    Esta es la biblioteca que te da los gestos (rotar y escalar).
-    Se compone de dos partes:
-    1. 'gesture-detector' (que pones en la cámara)
-    2. 'gesture-handler' (que pones en los objetos que quieres mover)
-  -->
-  <script src="https://cdn.jsdelivr.net/gh/fcor/aframe-ar-gesture-controls@master/dist/aframe-ar-gesture-controls.min.js"></script>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="utf-8">
-  <title>AR.js - Visor con Menú</title>
+  <title>AR.js - Visor con Menú (Debug)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   
   <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
@@ -30,7 +10,7 @@
   <script src="https://cdn.jsdelivr.net/gh/fcor/aframe-ar-gesture-controls@master/dist/aframe-ar-gesture-controls.min.js"></script>
   
   <style>
-    /* Estilos para el Menú */
+    /* ... [Estilos sin cambios] ... */
     #menu {
       position: absolute;
       bottom: 20px;
@@ -60,21 +40,20 @@
     #menu button:hover {
       background-color: #0056b3;
     }
-    
-    /* Estilo para el botón activo */
     #menu button.active {
       background-color: #28a745;
       box-shadow: 0 0 10px #28a745, 0 0 5px rgba(0,0,0,0.5);
     }
-    
-    /* Botón Volver (lo he movido a la esquina) /* ... existing code ... 
-    
-    
-    -->*/
     #back-button {
       position: absolute;
       top: 20px;
-
+      left: 20px;
+      z-index: 10;
+      padding: 10px 15px;
+      font-size: 16px;
+      background-color: white;
+      color: black;
+      border: 1px solid #555;
       border-radius: 8px;
     }
   </style>
@@ -84,12 +63,8 @@
 
   <button id="back-button" onclick="window.location.href='index.html'">Volver</button>
 
-  <!-- 
-    EL MENÚ
-    - Cada botón tiene un atributo 'data-model' 
-    - Este atributo guarda la RUTA (URL) al modelo 3D que debe cargar.-->
   <div id="menu">
-    <button class="active" data-model="modelos/Model_of_a_human_brain.glb">cerebro</button>
+    <button class="active" data-model="modelos/Model_of_a_human_brain.glb">Cerebro</button>
     <button data-model="modelos/skeleton_esqueleto_-_downloadable.glb">Esqueleto</button>
     <button data-model="modelos/solar_system_custom.glb">S. Solar</button>
     <button data-model="modelos/corazon__anim.glb">Corazón</button>
@@ -101,7 +76,16 @@
     vr-mode-ui="enabled: false;"
     embedded
     renderer="logarithmicDepthBuffer: true;"
-    arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;">
+    arjs="sourceType: webcam; 
+          
+          <!-- CAMBIO 1: Activamos la UI de depuración -->
+          debugUIEnabled: true; 
+          
+          detectionMode: mono_and_matrix; 
+          matrixCodeType: 3x3;
+          
+          <!-- CAMBIO 2: Ajustamos el 'ratio' del borde -->
+          patternRatio: 0.75;">
 
     <a-entity gesture-detector>
       <a-entity camera 
@@ -110,62 +94,49 @@
       </a-entity>
     </a-entity>
 
-    <!-- 
-      UN SOLO MARCADOR
-      - CORRECCIÓN: Usamos el archivo 'pattern-marker.patt' original 
-        que ya tenías de tu primer código.
-    -->
-    <a-marker type="pattern" url="patterns/pattern-arjs.patt">
-      
-      <!-- 
-        UN SOLO CONTENEDOR
-        - Este es el <a-entity> que cambiará su modelo 3D.
-        - Comienza cargando el cerebro por defecto (coincide con el botón activo).
-      -->
+    <a-marker type="pattern" url="patterns/pattern-marker.patt">
       
       <a-entity
         id="modelo-activo"
         gltf-model="url(modelos/Model_of_a_human_brain.glb)"
-        scale="1 1 1"
-        rotation="-90 0 0"
+        
+        scale="5 5 5"
+        position="0 0.5 0"
+        rotation="-90 0 0" 
+        
         gesture-handler="minScale: 0.25; maxScale: 10"
         class="collidable">
       </a-entity>
-
+      
     </a-marker>
 
   </a-scene>
 
   <script>
-    // Esperamos a que la página cargue
     document.addEventListener('DOMContentLoaded', () => {
-      
-      // Obtenemos las referencias al menú y al modelo 3D
       const menu = document.getElementById('menu');
       const modeloActivo = document.getElementById('modelo-activo');
       const buttons = document.querySelectorAll('#menu button');
 
-      // Añadimos un 'escuchador' de clics al menú
       menu.addEventListener('click', (event) => {
-        
-        <!-- Si el clic no fue en un botón, no hacemos nada -->
         if (event.target.tagName !== 'BUTTON') return;
 
-        //1. Quitar la clase 'active' de todos los botones -->
         buttons.forEach(btn => btn.classList.remove('active'));
-        
-        //-2. Añadir 'active' solo al botón que fue clickeado -->
         event.target.classList.add('active');
-        
-        //3. Obtener la URL del modelo desde el atributo 'data-model'-->
-        const modelUrl = event.target.getAttribute('data-model');
 
-        //4. Actualizar el modelo 3D en la escena -->
-        //Usamos setAttribute para cambiar el 'gltf-model'-->
+        const modelUrl = event.target.getAttribute('data-model');
+        
+        // Ocultamos el modelo temporalmente para evitar 'flasheos'
+        modeloActivo.setAttribute('visible', 'false');
+        
+        // Cambiamos el atributo 'gltf-model'
         modeloActivo.setAttribute('gltf-model', `url(${modelUrl})`);
         
-        //Nos aseguramos de que sea visible -->
-        modeloActivo.setAttribute('visible', 'true');
+        // IMPORTANTE: Esperamos a que el modelo cargue antes de hacerlo visible
+        // Esto evita errores si el modelo tarda en cargar
+        modeloActivo.addEventListener('model-loaded', () => {
+          modeloActivo.setAttribute('visible', 'true');
+        }, { once: true }); // 'once: true' evita que se acumulen 'listeners'
       });
     });
   </script>
