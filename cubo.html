@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <title>AR.js - Cubo Final Ajustado</title>
+  <title>AR.js - Cubo Ajustado Final</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   
   <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
@@ -68,15 +68,14 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       
-      // *** CONFIGURACIÓN DE TAMAÑOS ***
-      // Aquí ajustas el tamaño de cada cosa individualmente
+      // *** AQUÍ AJUSTAMOS LOS TAMAÑOS ***
       const configuracionModelos = {
-        'encefalo':  '5 5 5',       // A veces el cerebro viene muy pequeño, lo puse grande
-        'esqueleto': '1 1 1',       // Tamaño normal
-        's-solar':   '1 1 1',       
-        'corazon':   '1 1 1',       
-        'mano':      '1 1 1',       
-        'volcan':    '0.05 0.05 0.05' // ¡IMPORTANTE! El volcán reducido al 5% de su tamaño original
+        'encefalo':  '0.1 0.1 0.1',   // Lo hacemos 10 veces más pequeño
+        'esqueleto': '1 1 1',         // Normal
+        's-solar':   '1 1 1',         // Normal
+        'corazon':   '1 1 1',         // Normal (si sale grande, cambia a 0.1)
+        'mano':      '1 1 1',         // Normal
+        'volcan':    '0.01 0.01 0.01' // Volcán: 100 veces más pequeño
       };
 
       let currentModelAssetId = 'encefalo'; 
@@ -85,15 +84,16 @@
         for (let i = 0; i <= 5; i++) {
           const markerContent = document.getElementById(`marker-${i}-content`);
           if (markerContent) {
+            // Limpiar anterior
             const oldModels = markerContent.querySelectorAll('a-gltf-model');
             oldModels.forEach(model => model.remove());
 
+            // Crear nuevo
             const newModel = document.createElement('a-gltf-model');
             newModel.setAttribute('gltf-model', `#${currentModelAssetId}`);
             newModel.setAttribute('class', 'collidable'); 
             
-            // APLICAMOS LA ESCALA PERSONALIZADA
-            // Si el modelo está en la lista, usa su tamaño. Si no, usa 1 1 1.
+            // Aplicar escala personalizada
             const escala = configuracionModelos[currentModelAssetId] || '1 1 1';
             newModel.setAttribute('scale', escala);
 
@@ -105,6 +105,7 @@
       const menu = document.getElementById('menu');
       const buttons = document.querySelectorAll('#menu button');
 
+      // Inicializar botón activo
       buttons.forEach(btn => {
         if (btn.getAttribute('data-asset-id') === currentModelAssetId) {
           btn.classList.add('active');
@@ -112,6 +113,7 @@
       });
       updateModelsInMarkers(); 
 
+      // Evento Click
       menu.addEventListener('click', (event) => {
         if (event.target.tagName !== 'BUTTON') return;
 
@@ -119,7 +121,6 @@
         event.target.classList.add('active');
 
         currentModelAssetId = event.target.getAttribute('data-asset-id');
-        console.log("Cambiando a modelo: " + currentModelAssetId);
         updateModelsInMarkers(); 
       });
     });
