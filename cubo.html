@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <title>AR.js - Cubo Ajustado Final</title>
+  <title>AR.js - Cubo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   
   <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
@@ -28,7 +28,7 @@
   <button id="back-button" onclick="window.location.href='index.html'">Volver</button>
 
   <div id="menu">
-    <button class="active" data-asset-id="encefalo">Cerebro</button>
+    <button class="active" data-asset-id="encefalo">encefalo</button>
     <button data-asset-id="esqueleto">Esqueleto</button>
     <button data-asset-id="s-solar">S. Solar</button>
     <button data-asset-id="corazon">Corazón</button>
@@ -75,7 +75,7 @@
         's-solar':   '1 1 1',         // Normal
         'corazon':   '1 1 1',         // Normal (si sale grande, cambia a 0.1)
         'mano':      '1 1 1',         // Normal
-        'volcan':    '0.01 0.01 0.01' // Volcán: 100 veces más pequeño
+        'volcan':    '0.001 0.001 0.001' // Volcán: 100 veces más pequeño
       };
 
       let currentModelAssetId = 'encefalo'; 
